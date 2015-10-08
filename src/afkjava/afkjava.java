@@ -14,6 +14,7 @@ public void ActionPerformed(ActionEvent e){
 }
 
 public static void main(String[] args){
+								String newText = "hi";
 								JFrame frame1 = new JFrame();
 								frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 								JPanel panel1 = new JPanel();
@@ -25,7 +26,7 @@ public static void main(String[] args){
 								panel1.add(textfield);
 								frame1.setSize(400, 400);
 								frame1.setLocation(2900, 500);
-								textfield.setText("Whats up?");
+								textfield.setText(newText);
 								frame1.setLayout(new FlowLayout());
 								button.addActionListener(this);
 								frame1.setVisible(true);
