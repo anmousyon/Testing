@@ -8,13 +8,13 @@ public class afkjava extends JFrame implements ActionListener{
 
 public void ActionPerformed(ActionEvent e){
 	if(e.getSource() == button){
-		String newText = "Not Much, how are you";
+		textfield.setText("not much");
 	}
 
 }
 
 public static void main(String[] args){
-								String newText = "hi";
+								String newText = "What's up?";
 								JFrame frame1 = new JFrame();
 								frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 								JPanel panel1 = new JPanel();
@@ -30,7 +30,6 @@ public static void main(String[] args){
 								frame1.setLayout(new FlowLayout());
 								button.addActionListener(this);
 								frame1.setVisible(true);
-								textfield.setText(newText);
 }
 
 }
