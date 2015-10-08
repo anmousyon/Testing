@@ -8,7 +8,7 @@ public class afkjava extends JFrame implements ActionListener{
 
 public void ActionPerformed(ActionEvent e){
 	if(e.getSource() == button){
-		String newText = "Not Much";
+		String newText = "Not Much, how are you";
 	}
 
 }
