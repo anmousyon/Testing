@@ -4,56 +4,57 @@ import java.lang.Math.*;
 public class linkedLists{
 	public static void main(String[] args){
 		linkedList ll = new linkedList();
-		for(int i =0; i<10; i++){
-			double[] array = new double[(int)Math.pow(2,i)];
-			ll.insertAtEnd(array);
+		for(double i =0; i<10; i++){
+			ll.insertPriority(i);
+			ll.display();
 		}
 	}
 }
 
-class node{
-	protected double[] data;
-	protected node next;
-	protected node prev;
-
-	public node(){
-		next = null;
-		prev = null;
-		data = null;
-	}
-
-	public node(double[]  d, node n, node p){
-		prev = p;
-		next = n;
-		data = d;
-	}
-
-	public void setNext(node n){
-		next = n;
-	}
-
-	public void setPrev(node p){
-		prev = p;
-	}
-
-	public void setData(double[] d){
-		data = d;
-	}
-
-	public node getPrev(){
-		return prev;
-	}
-	
-	public node getNext(){
-		return next;
-	}
-
-	public double[] getData(){
-		return data;
-	}
-}
-
 class linkedList{
+	class node{
+		protected double[] data;
+		protected node next;
+		protected node prev;
+		protected int size;
+		public node(){
+			next = null;
+			prev = null;
+			data = null;
+		}
+
+		public node(double[]  d, node n, node p){
+			prev = p;
+			next = n;
+			data = d;
+			size = 0;
+		}
+	
+		public void setNext(node n){
+			next = n;
+		}
+	
+		public void setPrev(node p){
+			prev = p;
+		}
+	
+		public void setData(double[] d){
+			data = d;
+		}
+	
+		public node getPrev(){
+			return prev;
+		}
+		
+		public node getNext(){
+			return next;
+		}
+	
+		public double[] getData(){
+			return data;
+		}
+	}
+
 	protected node start;
 	protected node end;
 	protected int size;
@@ -71,8 +72,30 @@ class linkedList{
 	public int getSize(){
 		return size;
 	}
+	
+	public void insertPriority(double priority){
+		node current = start;
+		for(int i = 0; i<size; i++){
+			if (current != null){
+				if(current.size != Math.pow(2, i)){
+					current.data[i] = priority;
+					break;
+				}
+				else if (current.getNext() != null){
+					current = current.getNext();
+				}
+			}
+			else{
+				double[] newArray = new double[(int)Math.pow(2, i)];
+				insertArrayAtPosition(newArray, i);
+				break;
+			}
 
-	public void insertAtStart(double[] val){
+		}
+		current.size++;
+	}
+
+	public void insertArrayAtStart(double[] val){
 		node nptr = new node(val, null, null);
 		size++;
 		if(start == null){
@@ -86,7 +109,7 @@ class linkedList{
 		}
 	}
 
-	public void insertAtEnd(double[] val){
+	public void insertArrayAtEnd(double[] val){
 		node nptr = new node(val, null, null);
 		size++;
 		if (start == null){
@@ -100,7 +123,7 @@ class linkedList{
 		}
 	}
 
-	public void insertAtPosition(double[] val, int pos){
+	public void insertArrayAtPosition(double[] val, int pos){
 		node nptr = new node(val, null, null);
 		node ptr = start;
 		pos = pos -1;
@@ -118,7 +141,7 @@ class linkedList{
 		size++;
 	}
 	
-	public void deleteAtPosition(int pos){
+	public void deleteArrayAtPosition(int pos){
 		if(pos == 1){
 			start = start.getNext();
 			size--;
