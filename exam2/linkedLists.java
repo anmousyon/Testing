@@ -3,18 +3,20 @@ import java.lang.Math.*;
 
 public class linkedLists{
 	public static void main(String[] args){
+		final long startTime = System.currentTimeMillis();
 		linkedList ll = new linkedList();
-		int rand = 0;
-		for(double i =40; i>0; i--){
+		for(double i =0; i<50000; i++){
 			if(i%2 == 0){
-				ll.insertPriority(i);
+				ll.insertPriority(i/2);
 			}
 			else{
 				ll.insertPriority(i);
 			}
 			
 		}
-		ll.display();
+		final long endTime = System.currentTimeMillis();
+                System.out.println("Total execution time: " + (endTime - startTime) );
+		//ll.display();
 	}
 }
 
@@ -95,7 +97,6 @@ class linkedList{
 	
 	//checks if even or odd then finds its parent index by dividing the first child (always even) by two
 	public void findParent(){
-		//System.out.println("\ncurrent index: " + currentIndex);
 		parentIndex = -1;
 		if((currentIndex % 2) == 0){
 			parentIndex = (currentIndex / 2);
@@ -105,7 +106,6 @@ class linkedList{
 			parentIndex = ((currentIndex - 1) /2);
 		
 		}
-		//System.out.println("Parent Index: " + parentIndex);
 	}
 	
 	//gets parent value from parent's index then switches the values of the child and parent if the parent is greater than the child
@@ -122,7 +122,6 @@ class linkedList{
 		
 		//switches parent and child if necessary
 		if(parentPriority > priority){
-			//System.out.println("switching  parent: " + parentPriority + " child: " + priority);
 			temp = parentPriority;
 			parent.data[parentIndex] = priority;
 			current.data[currentIndex] = temp;
@@ -131,7 +130,6 @@ class linkedList{
 		}
 		
 		else{
-			//System.out.println ("not switching  parent: " + parentPriority + " child: " + priority);
 			return -1;//returns -1 if it doesnt need to be switched
 		}
 	}
