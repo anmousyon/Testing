@@ -5,7 +5,7 @@ public class linkedLists{
 	public static void main(String[] args){
 		final long startTime = System.currentTimeMillis();
 		linkedList ll = new linkedList();
-		for(double i =0; i<50000; i++){
+		for(double i =30; i<50000; i++){
 			if(i%2 == 0){
 				ll.insertPriority(i/2);
 			}
@@ -14,6 +14,7 @@ public class linkedLists{
 			}
 			
 		}
+		System.out.println(ll.deleteMin());
 		final long endTime = System.currentTimeMillis();
                 System.out.println("Total execution time: " + (endTime - startTime) );
 		//ll.display();
@@ -217,6 +218,26 @@ class linkedList{
 		}
 	}
 	
+	public double deleteMin(){
+		double min = 0;
+		double toInsert = 0;
+		if(start == null){
+			System.out.println("empty");
+		}
+		else{
+			current = start;
+			min = current.data[0];
+			while(current.getNext() != null){
+				current = current.getNext();
+			}
+			toInsert = current.data[current.size];
+			current.data[current.size] = 0;
+			current.size--;
+			insertPriority(toInsert);
+		}
+		return min;
+	}
+
 	//inserts the array at the start of the linkedlist (not used)
 	public void insertArrayAtStart(double[] val){
 		node nptr = new node(val, null, null);
