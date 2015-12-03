@@ -6,7 +6,7 @@ public class BinaryHeap{
         final long startTime = System.currentTimeMillis();
 
 		BinaryHeap binaryHeap = new BinaryHeap();
-		for(double i = 0; i<50000; i++){
+		for(double i = 1; i<5000000; i++){
                     if (i%2 == 0){
 			binaryHeap.insert(i/2);
                     }
@@ -17,11 +17,14 @@ public class BinaryHeap{
                 final long endTime = System.currentTimeMillis();
                 System.out.println("Total execution time: " + (endTime - startTime) );
 		boolean binaryCheck = false;
+		System.out.println(binaryHeap.findMin());
+		System.out.println(binaryHeap.numElements);
 		int binaryChild;
 		int counter = 0;
-		for(int i=0; i < binaryHeap.size(); i++){
+		for(int i=0; i < binaryHeap.numElements; i++){
 			binaryChild = binaryHeap.getChildIndex(i);
 			if(binaryChild == -1 || binaryChild ==0){
+				//System.out.println(i);
 				binaryCheck = true;
 				break;
 			}
@@ -49,8 +52,8 @@ public class BinaryHeap{
 
 	//starts out with size of 10
 	public BinaryHeap(){
-		size =10;
-		queue = new double[10];
+		size =1;
+		queue = new double[1];
 	}
 
 	//doubles the size of the array once it becomes full, halves it if it is less than half full
@@ -58,21 +61,17 @@ public class BinaryHeap{
 		if(size()==size){
 			size*=2;
 		}
-		else if(size()<size/2 && size>=20){
+		else if(size()<size/2 && size>=2){
 			size /= 2;
 		}
                 else{
                     return;
                 }
-		temp = new double[queue.length];
-		for(int i=0; i < queue.length; i++){
+		temp = new double[queue.length*2];
+		for(int i = 0; i<queue.length; i++){
 			temp[i] = queue[i];
 		}
-		queue = null;
-		queue = new double[size];
-		for(int i=0; i < temp.length; i++){
-			queue[i] = temp[i];
-		}
+		queue = temp;
 	}
 	
 	//since each elements is initialized to 0, it checks to see if there are any non-zero elements and returns false if there are
@@ -88,12 +87,6 @@ public class BinaryHeap{
 	//looks for the first zero and returns the index that it is at
 	public int size(){
 		return numElements;
-		/*for(int i = 0; i<queue.length; i++){
-			if(queue[i] == 0){
-				return i;
-			}
-		}
-		return queue.length;*/
 	}
 	
 	//looks for the smallest non-zero elements by iterating through the array and keeping track of the min
@@ -118,16 +111,10 @@ public class BinaryHeap{
                 int index = 0;
 		double temp;
 		double parent;
-		numElements++;
 		changeSize();
-		for (int i =0; i<queue.length; i++){
-			if (queue[i] == 0){
-				queue[i] = x;
-				index = i;
-				break;
-			}
-		}
-
+		queue[numElements] = x;
+		index = numElements;
+		numElements++;
 		//if its parent is greater than it, then it switches the values
 		while(true){
 			parent = queue[getParentIndex(index)];
@@ -166,6 +153,7 @@ public class BinaryHeap{
 			}
 		}
 		changeSize();
+		numElements--;
 		return min;
 	}
 	

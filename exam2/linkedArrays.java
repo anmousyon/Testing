@@ -1,11 +1,11 @@
 import java.util.*;
 import java.lang.Math.*;
 
-public class linkedLists{
+public class linkedArrays{
 	public static void main(String[] args){
 		final long startTime = System.currentTimeMillis();
 		linkedList ll = new linkedList();
-		for(double i =30; i<5000000; i++){
+		for(double i =1; i<5000000; i++){
 			if(i%2 == 0){
 				ll.insertPriority(i/2);
 			}
@@ -34,6 +34,7 @@ class linkedList{
 			next = null;
 			prev = null;
 			data = null;
+			size = 0;
 		}
 
 		public node(double[]  d, node n, node p){
@@ -76,12 +77,13 @@ class linkedList{
 	protected node start = null;
 	protected node end = null;
 	protected int size = 0;
+	protected int arrayLength = 0;
 	protected node current = null;
-	protected node parent = null;
 	protected int currentIndex = 0;
 	protected int parentIndex = 0;
-	protected node tempNode;
-	
+	protected double temp;
+	protected double toInsert;
+
 	public linkedList(){
 		start = null;
 		end = null;
@@ -98,35 +100,27 @@ class linkedList{
 	
 	//checks if even or odd then finds its parent index by dividing the first child (always even) by two
 	public void findParent(){
-		parentIndex = -1;
 		if((currentIndex % 2) == 0){
 			parentIndex = (currentIndex / 2);
 		}
 		
-		else if((currentIndex % 2) != 0){
+		else{
 			parentIndex = ((currentIndex - 1) /2);
 		
 		}
 	}
 	
 	//gets parent value from parent's index then switches the values of the child and parent if the parent is greater than the child
-	public int swap(double parentPriority, double priority, double temp, node tempNode){
+	public int swap(){
 		
 		findParent();
-
-		if(parentIndex == -1){
-			System.out.println("ERROR: couldn't get parent index");
-			return -1;
-		}
-
-		parentPriority = parent.data[parentIndex];//getting value at the parentindex of the previous array
 		
 		//switches parent and child if necessary
-		if(parentPriority > priority){
-			temp = parentPriority;
-			parent.data[parentIndex] = priority;
+		if(current.prev.data[parentIndex] > toInsert){
+			temp = current.prev.data[parentIndex];
+			current.prev.data[parentIndex] = toInsert;
 			current.data[currentIndex] = temp;
-			current = parent;
+			current = current.prev;
 			return parentIndex;//returns parent's index so that the current index can be changed
 		}
 		
@@ -136,101 +130,52 @@ class linkedList{
 	}
 	
 	//looks for parent and switches them if necessary then changes the value of current index to its new index (where parent was)
-	public void sort(double priority, double temp, double parentPriority, int tempIndex, node tempNode){
-		
-		while(true){
-			
-			//checks if current has a parent array, if it does set parent equal to that node
-			if(current.prev != null){
-				parent = current.prev;
-			}
-
-			else{
-				break;
-			}
-			
+	public void sort(){
+		while(current.prev != null && currentIndex != -1){
 			//setting tempIndex equal to the parent's index
-			tempIndex= swap(parentPriority, priority, temp, tempNode);
-			
-			//if it needs to be switched, set the current index to the parent index otherwise break
-			if(tempIndex == -1){
-				break;
-			}
-
-			else{
-				currentIndex = tempIndex;
-			}
+			currentIndex = swap();
 		}
 	}
 
 	//adds the new value to the array and stores its index then increments the stored size of array
-	public void addPriority(double priority){
-
-		current.data[current.size] = priority;
+	public void addPriority(){
+		current.data[current.size] = toInsert;
 		currentIndex = current.size;
 		current.size++;
 	}
 
 	//inserts the value into the first available slot
 	public void insertPriority(double priority){
-		
-		//declaring variables that are needed to switch parent and child and to keep track of the current position
-		double temp = 0;
-		double parentPriority = 0;
-		int tempIndex = 0;
-		int currentIndex = 0;
-		
+		toInsert = priority;
 		//checks if start is null if it is, then it creates an array (of size one) and adds it
 		if(start == null){
-			
 			double[] newArray = new double[1];
 			appendArray(newArray);
 		}
-
-		current = start;
-		tempNode = current;
 		
-		//iterates through each array in the linked list
-		for(int i = 0; i<size; i++){
+		current = end;
 
-			//checks if the array is full (each array is a sequential power of two), if it isn't full then it inserts the value at the first available slow
-			if(current.size != Math.pow(2, i)){
-				addPriority(priority);
-				sort(priority, temp, parentPriority, tempIndex, tempNode);
-				break;
-			}
-
-			//if it is full but there is another array in the linked list, go to that array
-			else if (current.getNext() != null){
-				current = current.getNext();
-			}
-
-			//if all the arrays in the linked list are full create a new array and add it to the end 
-			else{
-				double[] newArray = new double[(int)Math.pow(2, i+1)];//creating array twice as large as previous array
-				appendArray(newArray);
-				current = current.getNext();//sets current to the next array
-				addPriority(priority);
-				sort(priority, temp, parentPriority, tempIndex, tempNode);//will check if the new value needs to be sorted or not and will sort if necessary
-				break;
-			}
-
+		//if array is full then create a new array and move current to that next array
+		if(current.size == arrayLength){
+			double[] newArray = new double[arrayLength*2];//creating array twice as large as previous array
+			appendArray(newArray);
+			current = current.next;//sets current to the next array
 		}
+
+		addPriority();
+		sort();//will check if the new value needs to be sorted or not and will sort if necessary
 	}
 	
 	public double deleteMin(){
 		double min = 0;
-		double toInsert = 0;
+		toInsert = 0;
 		if(start == null){
 			System.out.println("empty");
 		}
 		else{
-			current = start;
-			min = current.data[0];
-			while(current.getNext() != null){
-				current = current.getNext();
-			}
-			toInsert = current.data[current.size];
+			current = end;
+			min = start.data[0];
+			toInsert = current.data[current.size-1];
 			current.data[current.size] = 0;
 			current.size--;
 			insertPriority(toInsert);
@@ -268,14 +213,13 @@ class linkedList{
 		if (start == null){
 			start = nptr;
 			end = start;
+			arrayLength = 1;
 		}
 		else{
-			node head = start;
-			while(head.getNext() != null){
-				head = head.getNext();
-			}
-			head.next = nptr;
-			nptr.prev = head;
+			arrayLength *= 2;
+			end.next = nptr;
+			nptr.prev = end;
+			end = nptr;
 		}
 	}
 	
@@ -343,7 +287,7 @@ class linkedList{
 			return;
 		}
 		node ptr = start;
-		System.out.println(start.getData(0)+ "\n");
+		System.out.println("\n" + start.getData(0)+ "\n");
 		ptr = start.getNext();
 		while(ptr != null){
 			for(int i = 0; i <ptr.size; i++){
