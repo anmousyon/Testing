@@ -37,11 +37,11 @@ class linkedList{
 			size = 0;
 		}
 
-		public node(double[]  d, node n, node p){
+		public node(double[]  d, node n, node p, int s){
 			prev = p;
 			next = n;
 			data = d;
-			size = 0;
+			size = s;
 		}
 	
 		public void setNext(node n){
@@ -77,7 +77,7 @@ class linkedList{
 	protected node start = null;
 	protected node end = null;
 	protected int size = 0;
-	protected int arrayLength = 0;
+	protected int arrayLength = 1;
 	protected node current = null;
 	protected int currentIndex = 0;
 	protected int parentIndex = 0;
@@ -193,7 +193,7 @@ class linkedList{
 
 	//inserts the array at the start of the linkedlist (not used)
 	public void prependArray(double[] val){
-		node nptr = new node(val, null, null);
+		node nptr = new node(val, null, null, 0);
 		size++;
 		if(start == null){
 			start = nptr;
@@ -208,7 +208,7 @@ class linkedList{
 	
 	//appends the array to the end of the linkedlist (used)
 	public void appendArray(double[] val){
-		node nptr = new node(val, null, null);
+		node nptr = new node(val, null, null, 0);
 		size++;
 		if (start == null){
 			start = nptr;
@@ -225,7 +225,7 @@ class linkedList{
 	
 	//inserts the array at a specific position (not used)
 	public void insertArray(double[] val, int pos){
-		node nptr = new node(val, null, null);
+		node nptr = new node(val, null, null, 0);
 		node ptr = start;
 		pos = pos -1;
 		for(int i =1; i<size; i++){
