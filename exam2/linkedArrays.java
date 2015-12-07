@@ -1,5 +1,5 @@
 import java.util.*;
-import java.lang.Math.*;
+//import java.lang.Math.*;
 
 public class linkedArrays{
 	public static void main(String[] args){
@@ -73,7 +73,7 @@ class linkedList{
 		}
 	}
 	
-	//start and end node, current and parent node with their indeces, and size of linkedlist
+	//start, parent and end node, current and parent indeces, and size of linkedlist
 	protected node start = null;
 	protected node end = null;
 	protected int size = 0;
@@ -88,6 +88,8 @@ class linkedList{
 		start = null;
 		end = null;
 		size = 0;
+		double[] newArray = new double[1];
+		appendArray(newArray);
 	}
 
 	public boolean isEmpty(){
@@ -116,7 +118,7 @@ class linkedList{
 		findParent();
 		
 		//switches parent and child if necessary
-		if(current.prev.data[parentIndex] > toInsert){
+		if(current.prev.data[parentIndex] > current.data[currentIndex]){
 			temp = current.prev.data[parentIndex];
 			current.prev.data[parentIndex] = toInsert;
 			current.data[currentIndex] = temp;
@@ -147,21 +149,14 @@ class linkedList{
 	//inserts the value into the first available slot
 	public void insertPriority(double priority){
 		toInsert = priority;
-		//checks if start is null if it is, then it creates an array (of size one) and adds it
-		if(start == null){
-			double[] newArray = new double[1];
-			appendArray(newArray);
-		}
 		
-		current = end;
-
-		//if array is full then create a new array and move current to that next array
-		if(current.size == arrayLength){
+		//if array is full then create a new array and append it
+		if(end.size == arrayLength){
 			double[] newArray = new double[arrayLength*2];//creating array twice as large as previous array
 			appendArray(newArray);
-			current = current.next;//sets current to the next array
 		}
 
+		current = end;//going to last array in list
 		addPriority();
 		sort();//will check if the new value needs to be sorted or not and will sort if necessary
 	}
