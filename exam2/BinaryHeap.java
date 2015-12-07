@@ -52,8 +52,8 @@ public class BinaryHeap{
 
 	//starts out with size of 10
 	public BinaryHeap(){
-		size =1;
-		queue = new double[1];
+		size =5000010;
+		queue = new double[5000010];
 	}
 
 	//doubles the size of the array once it becomes full, halves it if it is less than half full
@@ -61,7 +61,7 @@ public class BinaryHeap{
 		if(size()==size){
 			size*=2;
 		}
-		else if(size()<size/2 && size>=2){
+		else if(size()<size/2 && size>=10000010){
 			size /= 2;
 		}
                 else{
