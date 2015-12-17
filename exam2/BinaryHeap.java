@@ -6,7 +6,7 @@ public class BinaryHeap{
         final long startTime = System.currentTimeMillis();
 
 		BinaryHeap binaryHeap = new BinaryHeap();
-		for(double i = 1; i<5000000; i++){
+		for(double i = 1; i<20; i++){
                     if (i%2 == 0){
 			binaryHeap.insert(i/2);
                     }
@@ -16,6 +16,7 @@ public class BinaryHeap{
 		}
                 final long endTime = System.currentTimeMillis();
                 System.out.println("Total execution time: " + (endTime - startTime) );
+		binaryHeap.printArray();
 		boolean binaryCheck = false;
 		System.out.println(binaryHeap.findMin());
 		System.out.println(binaryHeap.numElements);
@@ -41,10 +42,12 @@ public class BinaryHeap{
 		else{
 			System.out.println("wrong");
 		}
-		//binaryHeap.printArray();
 
-	}
-	
+		for(int i = 0; i<10; i++){
+			binaryHeap.deleteMin();
+		}
+		binaryHeap.printArray();
+    }
 	int size;
 	double[] queue;
 	private double[] temp;
@@ -52,8 +55,8 @@ public class BinaryHeap{
 
 	//starts out with size of 10
 	public BinaryHeap(){
-		size =5000010;
-		queue = new double[5000010];
+		size =21;
+		queue = new double[21];
 	}
 
 	//doubles the size of the array once it becomes full, halves it if it is less than half full
@@ -61,9 +64,9 @@ public class BinaryHeap{
 		if(size()==size){
 			size*=2;
 		}
-		else if(size()<size/2 && size>=10000010){
+		/*else if(size()<size/2 && size>=42){
 			size /= 2;
-		}
+		}*/
                 else{
                     return;
                 }
@@ -130,30 +133,45 @@ public class BinaryHeap{
 		}
 	}
 	
+	public void deleteSort(int parentInd){
+		int childIndex1 = getChildIndex(parentInd);
+		int childIndex2 = childIndex1 + 1;
+		int childToSwitch;
+		double temp;
+		if(childIndex1 == -1){
+			return;
+		}
+		if(queue[childIndex1]<queue[childIndex2]){
+			childToSwitch = childIndex1;
+		}
+		else{
+			childToSwitch = childIndex2;
+		}
+		if(queue[childToSwitch]<queue[parentInd]){
+			temp = queue[parentInd];
+			queue[parentInd] = queue[childToSwitch];
+			queue[childToSwitch] = temp;
+			deleteSort(childToSwitch);
+		}
+		else{
+			return;
+		}
+	}
+
 	//after finding the minimum value, it delets it then re-sorts the array
 	public double deleteMin(){
-		double min = findMin();
-		int parentIndex = 0;
-		for(int i=0; i<queue.length; i++){
-			if(min == queue[i]){
-				parentIndex = i;
-			}
+		double min = queue[0];
+		if (isEmpty()){
+			return -1;
+			//throw new EmptyPQException();
 		}
-		int childIndex1;
-		int childIndex2;
-		int childIndex3;
-		while(parentIndex != getChildIndex(parentIndex)){
-			childIndex1= getChildIndex(parentIndex);
-			childIndex2 = childIndex1+1;
-			if(queue[childIndex1]>queue[childIndex2]){
-				switchParentChild(parentIndex, childIndex2);
-			}
-			else{
-				switchParentChild(parentIndex, childIndex1);
-			}
+		else{
+			queue[0] = queue[numElements - 1];
+			queue[numElements-1] = 0;
+			numElements--;
+			deleteSort(0);
 		}
 		changeSize();
-		numElements--;
 		return min;
 	}
 	
@@ -179,14 +197,12 @@ public class BinaryHeap{
 	}
 	
 	//fins and indexes first child index and returns it
-	public int getChildIndex(int parentIndex){
-		if(queue[(parentIndex*2+1)] == 0 && parentIndex*2+1<size()){
-			return parentIndex;
-		}
-		else if(parentIndex*2+1>size()){
+	public int getChildIndex(int parentInd){
+		parentInd = parentInd * 2 + 1;
+		if(parentInd+1>size() || queue[parentInd] == 0){
 			return -1;
 		}
-		return parentIndex*2+1;
+		return parentInd;
 
 	}
 

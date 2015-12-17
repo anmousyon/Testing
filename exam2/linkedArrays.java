@@ -7,21 +7,24 @@ public class linkedArrays{
 		linkedList ll = new linkedList();
 		for(double i =1; i<5000000; i++){
 			if(i%2 == 0){
-				ll.insertPriority(i/2);
+				ll.insert(i/2);
 			}
 			else{
-				ll.insertPriority(i);
+				ll.insert(i);
 			}
 			
 		}
 		final long endTime = System.currentTimeMillis();
                 System.out.println("Total execution time: " + (endTime - startTime) );
+		for(int i = 0; i <4999990; i++){
+			ll.deleteMin();
+		}
 		System.out.println(ll.deleteMin());
-		//ll.display();
+		ll.display();
 	}
 }
 
-class linkedList{
+class linkedList implements PriorityQueue{
 	class node{
 		
 		//next and previous pointers, an array and the current size of the array
@@ -100,6 +103,10 @@ class linkedList{
 		return size;
 	}
 	
+	public int size(){
+		int numElements = (arrayLength/2) + end.size;
+	}
+
 	//checks if even or odd then finds its parent index by dividing the first child (always even) by two
 	public void findParent(){
 		if((currentIndex % 2) == 0){
@@ -110,6 +117,10 @@ class linkedList{
 			parentIndex = ((currentIndex - 1) /2);
 		
 		}
+	}
+
+	public int findChild(int parentInd){
+		return parentInd *2;
 	}
 	
 	//gets parent value from parent's index then switches the values of the child and parent if the parent is greater than the child
@@ -147,8 +158,8 @@ class linkedList{
 	}
 
 	//inserts the value into the first available slot
-	public void insertPriority(double priority){
-		toInsert = priority;
+	public void insert(double x){
+		toInsert = x;
 		
 		//if array is full then create a new array and append it
 		if(end.size == arrayLength){
@@ -161,26 +172,37 @@ class linkedList{
 		sort();//will check if the new value needs to be sorted or not and will sort if necessary
 	}
 	
-	public double deleteMin(){
-		double min = 0;
-		toInsert = 0;
-		if(start == null){
+	public double findMin(){
+		double min = -1;
+		if(isEmpty()){
 			System.out.println("empty");
+			throw new EmptyPQException();
 		}
 		else{
-			current = end;
 			min = start.data[0];
-			toInsert = current.data[current.size-1];
-			current.data[current.size] = 0;
-			current.size--;
-			insertPriority(toInsert);
+		}
+		return min;
+			
+	}
+
+	public double deleteMin(){
+		double min = findMin();
+		toInsert = 0;
+		if(min != -1){
+			toInsert = end.data[current.size-1];
+			end.data[end.size] = 0;
+			end.size--;
+			insert(toInsert);
 			node temp;
-			if(current.size == 0 && current.getPrev() != null){
-				node prevNode = current.prev;
-				prevNode.next = null;
-				current = null;
+			if(end.size == 0 && end.getPrev() != null){
+				node prevNode = end.prev;
+				end.next = null;
+				end = null;
 				size--;
 
+			}
+			else if(end.size == 0 && end == start){
+				start = null;
 			}
 		}
 		return min;
@@ -190,7 +212,7 @@ class linkedList{
 	public void prependArray(double[] val){
 		node nptr = new node(val, null, null, 0);
 		size++;
-		if(start == null){
+		if(isEmpty()){
 			start = nptr;
 			end = start;
 		}
