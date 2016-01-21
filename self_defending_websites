@@ -1,0 +1,92 @@
+deep panda - nation state sponsored hacker group
+
+#methods
+powershell
+webshell
+sql inj
+cmd inj
+file upload
+
+#Standard Web Protection
+web app firewalls
+manual/staitc/dynamic code analysis
+ids/ips
+training / s-sdlc
+logging and monitoring
+
+> standard protection doesnt detect logic imperfection than can be exploited
+
+#web app firewall
+rule based
+race conditions / false pos
+use scoring model
+doesnt know app
+expensive
+should be used as part of layered approach
+sim issues with ids/ips
+
+#code analysis
+not good at detecting logic errors
+complex apps hard to scan completely
+having robust sdlc is important
+
+#static scanning
+analyzes raw source code
+used for quality analysos
+can have a lot of false pos
+very detailed
+
+#log and moitor
+when you see it, it may be too late
+
+#########################
+###self defending code###
+#########################
+
+>slow down responses
+>blacklist ip o webserver/router
+>parameter scrambling
+>honeypots
+>attack baiting and detection
+
+#immediate detection should be followed by immediate action
+detection of sql inj
+system commands
+javascript terms
+/etc/passwd calls
+
+#baiting
+use dummy variables
+send a cookie that shouldnt be used by app, if it comes back modified
+dummy url strings come back changed
+
+#geo-fencing
+same user id across multiple IPs w/ diff subnets
+simultaneous sessions or sessions over mult days
+
+#blacklisting
+modify the .htaccess file to deny certain ip
+
+#create a firewall rule blacklist (long term)
+deny ip or subnet after detection (proxy detection important)
+4 hours first time then permanent after second attempt
+
+#change param on every page view
+have values changed on every page load
+mapping random vars to every param
+
+#annoyance
+message boxes that only bots would click on
+get significant delay on normally not accessed page
+dynamic content page placement
+redirect to massive file download
+
+#benefits
+no reliance on signatures
+quick t implement
+powerful and flexible
+reuse through code library
+layered defense
+know how it is supposed to operate, which should be easy to find inconsistencies
+
+swatch monitoring - watches logs for patterns
