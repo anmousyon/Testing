@@ -1,0 +1,193 @@
+<html>
+  <head>
+    <script type='text/javascript'>
+      code goes here
+    </script>
+  </head>
+</html>
+
+alert freezes the execution / used for debugging
+
+dynamic, weakly typed, prototype-based w/ first-class functions
+
+dynamic - compilation and execution happen together
+weakly typed - type associated with value not variable
+prototype-based - loose interpretation of object oriented programming
+
+document.write('<p>text</p>'); - displays on page
+
+js has undefined and null which are different
+if no value has been provided, it is undefined
+
+primitives - undefined / null / bool / string / number
+objects - object / array / data / regexp / function
+
+#operators
+var 		var foo
+new 		new foo
+assignment 	foo = {bar:"val"} or foo.bar = val
+delete 		delete foo.bar
+member 		foo.bar or foo["bar"]
+call 		bar() or foo.bar()
+comparison 	== or ===
+
+#variables
+delcared using keyword var (not mandatory)
+must start with letter or _
+doesnt have explicit data types
+scope is global by default / prefixing with var makes it local
+formal parameters are local to the function
+
+=== - strict equal, must be same type, preferred
+== - compares value, performance issues
+
+21 == "21" 		true
+21 === "21" 		false
+undefined == null 	true
+undefined === null 	false
+{} === {} 		false because the objects go to a different address so it assumes theyre different
+
+var str1 = "hi" 	creates a string hi in memory then points str1 to it
+var str2 = "hi" 	since its already created in memory, just points to hi string also
+
+var obj1 = {}; 		creates an object in memory at a unique address
+var obj2 = {}; 		different object so it creates a new object in memory
+
+== 			tries to recursively get them comparble by translating both sides into different formats
+
+#control structs
+same as java or C++
+
+#functions
+
+function myfunction(arg1, arg2, etc){
+	function body;
+}
+
+or 
+
+var square = function(x) { return x*x }
+
+function can be defined without function name
+
+objects 	 	passed by reference 
+primitives 	 	passed by value
+
+#top-level functions
+eval 			evaluates a string without reference to particular object
+pareint parsefloat 	return a numeric value for the var
+
+#dialog boxes
+alert 			freeze and show message
+prompt 			asks for input
+comfirmation 		asks for confirmation
+
+#use
+embedded
+external 		file should end with .js
+inline
+
+#html event handlers
+keys, mouse, page and focus event handlers available
+
+#DOM - Document Object Model
+has a hierarchy of objects
+
+allows separation of site into 3 things
+1. content 		HTML
+2. presentation 	CSS
+3. behavior 		Javascript
+
+global code  		window.onload handler
+functions wont user parentheses
+
+anonymous functions can be used but are hard to read sometimes
+
+#DOM Tree
+html -> head / body
+head -> title / meta / meta
+body -> h1 / p / ul
+p -> a
+ul -> li / li / li
+
+#types of DOM nodes
+elements 		html tag
+text 			taxt in block
+attribute 		children in an element node / cant have children
+
+#DOM object props
+tagName 		elements HTML tag
+className 		css classes of element
+innerHTML 		content inside element
+src 			url target of an img
+value 			text in input control
+checked 		check if box is checked
+
+class 			allows you to apply something to all of same class
+id 			allows you to specify a certain element
+
+innerHTML can inject arbitrary HTML content into the page (bad style) / use plain text only
+
+style 			lets you set the css for any element
+
+#DOM element methods
+allows you to add, move, and replace nodes
+
+#jQuery
+extended library to lower amount of js code
+simplifies DOM-oriented client-side scripting
+lightweight
+single js file that needs to be included in html page or link to online version
+online version 		src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+
+AJAX 		asynchronous calls to dynamically change site
+
+$ 		signifies jQuery
+selector 		specifies the HTML element
+action 		action to be done
+
+$(selector).action()
+
+$(this).hide() 		hides current element
+$("p").hide() 		hides all <p> elements
+$(".test").hide() 	hides all elements of class test
+$("#test").hide() 	hides all elements of id test
+
+Document Ready Event is like window.onload
+
+$(document).ready(function){}
+
+#selectors
+$("*") 			selects all elements
+$(this) 		selects cuurent element
+$("p.intro") 		selects ll <p> elements with class="intro"
+$("[href]") 		selects all elements with href attribute
+$("ul li:first") 	selects the first <li> element of the first <ul>
+$("ul li:first-child") 	selects the first <li> elements of every <ul>
+$("a[target='_blank']") selectes all <a> elements with a target attribute value equal to "_blank"
+
+callback functions are used to make sure a function is called after first one finishes
+
+you can chain together actions
+$(#p1").css(color="red").slideup("200").hide()
+
+get  			mostly used for form validation
+add 			append / prepend / after / before
+remove 			removes selected element and its child elements
+empty 			removes the child elements (if any) of selected element
+
+addClass 		adds the class
+removeClass 		removes the class
+toggleClass 		toggles between adding and removing class
+css 			sets or returns the style attribute
+
+#DOM Traversing
+next 			returns next sibling
+newxtAll 		returns all next siblings
+nextUntil 		returns all next siblings until specified sibling
+(same for prev)
+
+#AJAX
+asynchronous js +xml
+allows you to dynamically change the page without refreshing
+
