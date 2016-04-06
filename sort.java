@@ -6,18 +6,28 @@ public class sort{
 		ArrayList<Integer> unsorted = new ArrayList<Integer>();
 		Random rng = new Random();
 		int r = 0;
-		for(int i=0; i < 100; i++){
-			r = rng.nextInt(1000);
-			System.out.println(r);
+		for(int i=0; i < 1000; i++){
+			r = rng.nextInt(10000);
+			//System.out.println(r);
+			while(unsorted.contains(r)){
+				r += 1;
+			}
 			unsorted.add(r);
+		
 		}
 		System.out.println("unsorted size:" + unsorted.size());
 		double mean = mean(unsorted);
 		double stdev = stdev(mean, unsorted);
 		ArrayList<Integer> sorted = new ArrayList<Integer>();
 		sorted = getList(mean, stdev, unsorted, sorted);
-		for(int x: sorted){
-			//System.out.println(x);
+		/*for(int x: sorted){
+			System.out.println(x);
+		}*/
+		if(check(sorted)){
+			System.out.println("sorted correctly");
+		}
+		else{
+			System.out.println("not sorted");
 		}
 	}	
 	
@@ -41,18 +51,19 @@ public class sort{
 			stdsum = Math.pow((x-m), 2);
 			count += 1;
 		}
-		stdev = stdsum/(count-1);
-		System.out.println(stdev);
+		stdev = Math.pow(stdsum/(count), .15);
+		System.out.println("stdev: " + stdev);
 		return stdev;
 	}
 
 	public static ArrayList<Integer> getList(double m, double sd, ArrayList<Integer> u, ArrayList<Integer> s){
 		int max = Collections.max(u);
 		int min = Collections.min(u);
-		int numbuckets = (int)(Math.ceil((max-min)/(sd)));
+		int numbuckets = (int)(Math.ceil((max-min)/sd))+200;
+		//int numbuckets = (int)(Math.ceil((max-min)/(sd)))+10;
 		//System.out.println("Max: " + max);
 		//System.out.println("Min: " + min);
-		//System.out.println("# of buckets: " + numbuckets);
+		System.out.println("# of buckets: " + numbuckets);
 		ArrayList<Integer>[] buckets = new ArrayList[numbuckets];
 		for(int i = 0; i < numbuckets; i++){
 			ArrayList<Integer> bucket = new ArrayList<Integer>();
@@ -66,8 +77,10 @@ public class sort{
 			buckets[bucketnum].add(x);
 		}
 		int totalsize = 0;
+		int usedbuckets = 0;
 		for(ArrayList<Integer> x : buckets){
 			if(!x.isEmpty()){
+				usedbuckets++;
 				max = Collections.max(x);
 				//System.out.println(max);
 				min = Collections.min(x);
@@ -85,10 +98,21 @@ public class sort{
 					}
 				}
 				totalsize+= size;
-				System.out.println("bucket size: " + size);
+				//System.out.println("bucket size: " + size);
 			}
 		}
 		System.out.println("total size: " + totalsize);
+		System.out.println("used buckets: " + usedbuckets);
 		return s;
+	}
+	public static boolean check(ArrayList<Integer> s){
+		int p = 0;
+		for(int x : s){
+			if(x<p){
+				return false; 
+			}
+			p = x;
+		}
+		return true;
 	}
 }
