@@ -1,0 +1,44 @@
+cpu idles while waiting on memory
+
+caching
+    stores data that we think well need soon
+    copied from slower to faster storage temp
+
+fast storage checked
+    if not there
+        data copied to cache and used there
+    else
+        information used from cache
+
+multi-core problem
+    each processor has its own cache
+        level one cache
+    if p1 changes it cache
+        others have older version & dont know
+    if multiple proc have a copy of same data
+        change not propogated throughout the caches
+
+solution
+    if one proc changes data
+        invalidate other caches that have that data
+
+safety - primary
+    ensure bad things dont happen
+
+liveness - secondary
+    get good things to happen
+
+direct memory access structure
+    one interrupt per block rather than one per byte
+    device controller transers blocks
+        from buffer to main without cpu intervention
+
+polling
+    cpu checks if all the data has been moved to ram
+
+notification
+    after one block have ram send an interrupt
+        then cpu processes interrupt
+    stops cpu from polling after every byte
+
+
