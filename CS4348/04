@@ -38,7 +38,6 @@ context switch
 threads
     executing multiple locations at once
     share the same address space
-    
 
 threads share same address space
     processes do not
