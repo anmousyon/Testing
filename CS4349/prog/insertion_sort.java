@@ -1,24 +1,24 @@
+//insertion sort
 import java.util.*;
 import java.nio.file.*;
 import java.io.*;
+import java.lang.Math.*;
 
 public class insertion_sort{
-    
     public static void main(String[] arg){
-        ArrayList<Integer> input = read_list();
-        System.out.println("Unsorted:");
-        for(int x : input){
-            System.out.println(x);
-        }
-        final long startTime = System.currentTimeMillis();
+		ArrayList<Integer> input = read_list(arg[0]);
+		final double start = System.nanoTime();
         input = sort(input);
-        final long endTime = System.currentTimeMillis();
-        System.out.println("\nSorted:");
-        for(int x : input){
-            System.out.println(x);
-        }
-        System.out.println("\nSorting took: " + (endTime-startTime) + " ms");
-    }
+        final double end = System.nanoTime();
+		double time = (end-start)/1000;
+		time = Math.round(time*1000)/1000;
+		time /= 1000;
+       	System.out.println("\nSorting took: " + time  + " ms");
+		for(int x : input){
+       	  	System.out.println(x);
+		}
+       	System.out.println("\nSorting took: " + time  + " ms");
+	}
 
     public static ArrayList<Integer> sort(ArrayList<Integer> input){
         for(int i = 0; i < input.size(); i++){
@@ -33,18 +33,17 @@ public class insertion_sort{
         return input;
     }
 
-    public static ArrayList<Integer> read_list(){
+    public static ArrayList<Integer> read_list(String name){
         ArrayList<Integer> input = new ArrayList<Integer>();
         try{
-            for (String line : Files.readAllLines(Paths.get("list.txt"))) {
+            for (String line : Files.readAllLines(Paths.get(name))) {
                 //System.out.println(line);
                 input.add(Integer.parseInt(line));
             }
-        } 
+        }
         catch(IOException ex){
             ex.printStackTrace();
         }
         return input;
     }
 }
-            
