@@ -18,26 +18,12 @@ def fill_data(args, arg_num):
 
         for line in data:
             if line.split():
-                if not seen_classes:
-                    seen_classes = 1
-                    continue
                 row = []
                 for word in line.split():
                     row.append(word)
                 data_matrix.append(row)
 
     return data_matrix
-
-def get_classes(args, arg_num):
-    '''get the class names'''
-    classes = []
-
-    with open(args[arg_num]) as data:
-        for line in data:
-            if line.split():
-                for word in line.split():
-                    classes.append(word)
-                return classes
 
 def get_data(args, arg_num):
     '''read in training and testing data'''
@@ -189,16 +175,22 @@ def make_tree(data_matrix, classes, target_class, current_root):
             classes.remove(current_root)
             make_tree(data_matrix, classes, target_class, next_root)
 '''
+
+def test(args, tree):
+    '''test the decision tree for accuracy'''
+    test_matrix = get_data(args, 0)
+    test_matrix.remove(test_matrix[0])
+
 def main():
     '''read and print data'''
     #grab the args
     args = get_args()
-    for i in range(1, 3):
-        data_matrix = get_data(args, i)
-        classes = get_classes(args, i)
-        #print(classes)
-        #print(data_matrix)
-        target_class = 'class'
-        make_tree(data_matrix, classes, target_class, 0)
 
+    #read data and make trees
+    data_matrix = get_data(args, 0)
+    classes = data_matrix[0]
+    data_matrix.remove(classes)
+    target_class = 'class'
+    tree = make_tree(data_matrix, classes, target_class, 0)
+    test(args, tree)
 main()
