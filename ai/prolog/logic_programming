@@ -1,0 +1,84 @@
+common sense reasoning
+    non-monotonic logic is needed
+        answer set programming
+
+standard logic is monotonic
+
+logic programming == relational programming
+    predicate = relation
+
+relation R over two sets (A and B)
+    R |subset of| AxB
+
+logic prog
+    consists of
+        facts
+            unconditional truths
+                ie. mother(lisa, abe)
+        rules
+            conditional truths
+                asserted to be truth if other things are true
+                ie. parent(X,Y) :- father(X,Y) 
+
+## prolog ##
+
+constants
+    lowercase
+variable
+    uppercase
+every statement ends in a period
+IF is implication in opposite direction
+    x if q == x :- q
+AVOID left recursive rules
+
+list processing
+    fact, rules, queries
+        have predicates
+            p(t[1], ..., t[n])
+    args pf predicates are called terms
+    term
+        constants
+            atoms
+                jim, john
+            numbers
+                2, 3, 4
+        variables
+            X, Y
+        structures
+            like a struct in C/C++
+            allows us to aggregate data
+            f(t[1], ..., t[n])
+                f
+                    name of structure
+                t[i]
+                    terms
+            ie
+                tree(2, tree(3, nil, nil), tree(4, nil, nil))
+
+prolog only has structures
+
+[1,2,3]
+    creates a linked list between 1,2,3
+
+list has a head and a tail
+    head
+        first element of list
+        not a list, just the element
+    tail
+        remove first element, what is left is the tail
+        tail of a list is a list
+
+[h|t]
+    represents a list whose head=h and tail=t
+    ? - [H|T] = [10,20,30]
+        H=10
+        T=[20,30]
+    ? - [H1,H2|T} = [10,20,30]
+        H1=10
+        H2=20
+        T=[30]
+
+prolog is a single assignment language
+    once a var is assigned a val, it cannot be changed
+
+anytime you define a relation,l you define its inverse

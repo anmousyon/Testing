@@ -1,0 +1,24 @@
+mother(lisa,abe).
+mother(lisa,sarah).
+mother(nancy,john).
+mother(mary,jill).
+mother(sarah,susan).
+mother(susan,phil).
+mother(susan,jack).
+father(tony,abe).
+father(tony,sarah).
+father(abe,john).
+father(john,jill).
+father(bill,susan).
+father(rob,phil).
+father(rob,jack).
+father(jack,jim).
+par(X,Y) :- father(X,Y).
+par(X,Y) :- mother(X,Y).
+gp(X,Y) :- par(X,Z), par(Z,Y).
+ggp(X,Y) :- gp(X,Z), par(Z,Y).
+anc(X,Y) :- par(X,Y).
+anc(X,Y) :- par(X,Z), anc(Z,Y).
+sibling(A,B) :- par(X,A), par(X,B), A\==B.
+sg(A,B) :- sibling(A,B).
+sg(A,B) :- par(X,A), par(Y,B), sg(X,Y).

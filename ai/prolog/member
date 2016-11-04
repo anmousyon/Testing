@@ -1,0 +1,8 @@
+member(X,[X|_]).
+member(X,[_|T]) :- member(X,T).
+append([],L,L).
+append([H|T],Y,[H|Z]) :- append(T,Y,Z).
+prefix(L1,L2) :- append(L1,_,L2).
+suffix(L1,L2) :- append(_,L1,L2).
+select(X,[X|T],T).
+select(X,[Y|T],[Y|R]) :- select(X,T,R).
