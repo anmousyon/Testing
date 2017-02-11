@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using RedditSharp;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Newtonsoft.Json;
 using System.IO;
-using Newtonsoft.Json.Bson;
 
 namespace ellie
 {
 	class MainClass
 	{
-		public static void Main(string[] args)
+		public static void Main()
 		{
-            Controller controller = new Controller();
+            var controller = new Controller();
             controller.buildDatabase();
             controller.displayDatabase();
 		}
@@ -25,34 +23,34 @@ namespace ellie
 
 		public Controller()
 		{
-			this.database = new Database();
+			database = new Database();
 		}
 
-		public async void displayDatabase()
+		public void displayDatabase()
 		{
-			Cleaner cleaner = new Cleaner();
+			var cleaner = new Cleaner();
 
-            using (var cursor = await database.posts.FindAsync(new BsonDocument(), new FindOptions<BsonDocument>()))
+			using (var cursor = database.posts.FindSync(new BsonDocument(), new FindOptions<BsonDocument>()))
+			{
+				while (cursor.MoveNext())
+				{
+					var batch = cursor.Current;
+					foreach (BsonDocument postData in batch)
+					{
+						var post = new Post();
+						post = cleaner.load(postData, post);
+						Console.WriteLine(post.label);
+					}
+				}
+			}
+            using (var cursor = database.comments.FindSync(new BsonDocument(), new FindOptions<BsonDocument>()))
             {
-                while (await cursor.MoveNextAsync())
-                {
-                    var batch = cursor.Current;
-                    foreach (BsonDocument postData in batch)
-                    {
-                        Post post = new Post();
-                        post = cleaner.load(postData, post);
-                        Console.WriteLine(post.label);
-                    }
-                }
-            }
-            using (var cursor = await database.comments.FindAsync(new BsonDocument(), new FindOptions<BsonDocument>()))
-            {
-                while (await cursor.MoveNextAsync())
+                while (cursor.MoveNext())
                 {
                     var batch = cursor.Current;
                     foreach (BsonDocument commentData in batch)
                     {
-                        Comment comment = new Comment();
+                        var comment = new Comment();
                         comment = cleaner.load(commentData, comment);
                         Console.WriteLine(comment.label);
                     }
@@ -62,16 +60,16 @@ namespace ellie
 
 		public void buildDatabase()
 		{
-			Reddit reddit = new Reddit();
-			Cleaner cleaner = new Cleaner();
+			var reddit = new Reddit();
+			var cleaner = new Cleaner();
 			foreach (var subreddit in reddit.getSubreddits())
 			{
 				foreach (var post in reddit.getPosts(subreddit))
 				{
-					this.database.insert(cleaner.clean(post), new Post());
+					database.insert(cleaner.clean(post), new Post());
 					foreach (var comment in reddit.getComments(post))
 					{
-						this.database.insert(cleaner.clean(comment), new Comment());
+						database.insert(cleaner.clean(comment), new Comment());
 					}
 				}
 			}
@@ -84,10 +82,10 @@ namespace ellie
 		public IMongoCollection<BsonDocument> posts, comments;
 		public Database()
 		{
-			this.client = new MongoClient();
+			client = new MongoClient();
 			Tuple <IMongoCollection<BsonDocument>, IMongoCollection<BsonDocument>> collections = load();
-			this.posts = collections.Item1;
-			this.comments = collections.Item2;
+			posts = collections.Item1;
+			comments = collections.Item2;
 		}
 
 		public Tuple<IMongoCollection<BsonDocument>, IMongoCollection<BsonDocument>> load()
@@ -115,19 +113,19 @@ namespace ellie
 		public Analyzer analyzer;
 		public Cleaner()
 		{
-			this.analyzer = new Analyzer();
+			analyzer = new Analyzer();
 		}
 
 		public BsonDocument clean(RedditSharp.Things.Post post)
 		{
-			Post dirty = new Post(post);
+			var dirty = new Post(post);
 			dirty.TitleSentiment = analyzer.calcSentiment(post.Title);
 			return dump(dirty);
 		}
 
 		public BsonDocument clean(RedditSharp.Things.Comment comment)
 		{
-			Comment dirty = new Comment(comment);
+			var dirty = new Comment(comment);
 			dirty.BodySentiment = analyzer.calcSentiment(comment.Body);
 			return dump(dirty);
 		}
@@ -208,7 +206,7 @@ namespace ellie
 		public List<RedditSharp.Things.Subreddit> getSubreddits()
 		{
             string[] subredditNames = File.ReadAllLines("../../subreddits.txt");
-			List<RedditSharp.Things.Subreddit> subreddits = new List<RedditSharp.Things.Subreddit> { };
+			var subreddits = new List<RedditSharp.Things.Subreddit> { };
 			foreach (string name in subredditNames)
 			{
 				subreddits.Add(reddit.GetSubreddit("/r/" + name));
@@ -248,10 +246,10 @@ namespace ellie
 
 		public Submission(RedditSharp.Things.Post item)
 		{
-			this.label = item.Id;
-			this.subreddit = item.Subreddit.FullName;
-			this.username = item.Author.FullName;
-			this.score = item.Score.ToString();
+			label = item.Id;
+			subreddit = item.Subreddit.FullName;
+			username = item.Author.FullName;
+			score = item.Score.ToString();
 		}
         public Submission()
         {
@@ -271,10 +269,10 @@ namespace ellie
 
 		public Submission(RedditSharp.Things.Comment item)
 		{
-			this.label = item.Id;
-			this.subreddit = item.Subreddit;
-			this.username = item.Author;
-			this.score = item.Score.ToString();
+			label = item.Id;
+			subreddit = item.Subreddit;
+			username = item.Author;
+			score = item.Score.ToString();
 		}
 	}
 
@@ -303,7 +301,7 @@ namespace ellie
 			string titleSentiment
 		) : base(label, subreddit, username, score)
 		{
-			this.TitleSentiment = titleSentiment;
+			TitleSentiment = titleSentiment;
 		}
 		public Post(RedditSharp.Things.Post post) : base(post)
 		{
@@ -335,7 +333,7 @@ namespace ellie
 			string bodySentiment
 		) : base(label, subreddit, username, score)
 		{
-			this.BodySentiment = bodySentiment;
+			BodySentiment = bodySentiment;
 		}
 		public Comment(RedditSharp.Things.Comment comment) : base(comment)
 		{
