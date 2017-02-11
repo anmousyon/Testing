@@ -16,3 +16,4 @@ C:\Users\anmou\Documents\GitHub\Testing\c#\ellie\ellie\bin\Debug\MongoDB.Driver.
 C:\Users\anmou\Documents\GitHub\Testing\c#\ellie\ellie\bin\Debug\Newtonsoft.Json.xml
 C:\Users\anmou\Documents\GitHub\Testing\c#\ellie\ellie\obj\x86\Debug\ellie.exe
 C:\Users\anmou\Documents\GitHub\Testing\c#\ellie\ellie\obj\x86\Debug\ellie.pdb
+C:\Users\anmou\Documents\GitHub\Testing\c#\ellie\ellie\bin\Debug\ellie.exe.config

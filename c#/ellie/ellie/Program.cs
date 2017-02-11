@@ -62,7 +62,7 @@ namespace ellie
 		{
 			var reddit = new Reddit();
 			var cleaner = new Cleaner();
-			foreach (var subreddit in reddit.getSubreddits())
+			foreach (var subreddit in reddit.getSubreddits().GetRange(0,2))
 			{
 				foreach (var post in reddit.getPosts(subreddit))
 				{
@@ -78,7 +78,7 @@ namespace ellie
 
 	public class Database
 	{
-		public MongoClient client;
+		public IMongoClient client;
 		public IMongoCollection<BsonDocument> posts, comments;
 		public Database()
 		{
@@ -104,7 +104,7 @@ namespace ellie
 
 		public void insert(BsonDocument comment, Comment empty)
 		{
-			posts.InsertOne(comment);
+			comments.InsertOne(comment);
 		}
 	}
 
@@ -163,7 +163,7 @@ namespace ellie
 				post["subreddit"].ToString(),
 				post["username"].ToString(),
 				post["score"].ToString(),
-				post["bodySentiment"].ToString()
+				post["titleSentiment"].ToString()
 			);
 			return loaded;
 		}
@@ -175,7 +175,7 @@ namespace ellie
 				comment["subreddit"].ToString(),
 				comment["username"].ToString(),
 				comment["score"].ToString(),
-				comment["titleSentiment"].ToString()
+				comment["bodySentiment"].ToString()
 			);
 			return loaded;
 		}
@@ -205,11 +205,13 @@ namespace ellie
 
 		public List<RedditSharp.Things.Subreddit> getSubreddits()
 		{
-            string[] subredditNames = File.ReadAllLines("../../subreddits.txt");
+            string[] subredditNames = File.ReadAllLines("../../subs.txt");
 			var subreddits = new List<RedditSharp.Things.Subreddit> { };
 			foreach (string name in subredditNames)
 			{
-				subreddits.Add(reddit.GetSubreddit("/r/" + name));
+                var fullName = "/r/" + name.Trim();
+                Console.WriteLine(fullName);
+                subreddits.Add(reddit.GetSubreddit(fullName));
 			}
 			return subreddits;
 		}
@@ -233,7 +235,14 @@ namespace ellie
 
 		public string calcSentiment(string text)
 		{
-			return i4Ds.LanguageToolkit.SentimentAnalyzer.GetSentiment(text).ToString();
+            if (i4Ds.LanguageToolkit.LanguageDetector.DetectLanguage(text) != null)
+            {
+                return i4Ds.LanguageToolkit.SentimentAnalyzer.GetSentiment(text).ToString();
+            }
+            else
+            {
+                return "null";
+            }
 		}
 	}
 
@@ -247,8 +256,8 @@ namespace ellie
 		public Submission(RedditSharp.Things.Post item)
 		{
 			label = item.Id;
-			subreddit = item.Subreddit.FullName;
-			username = item.Author.FullName;
+			subreddit = item.SubredditName;
+			username = item.AuthorName;
 			score = item.Score.ToString();
 		}
         public Submission()
