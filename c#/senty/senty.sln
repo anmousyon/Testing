@@ -1,0 +1,16 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{378DE7B6-5876-4D4D-ACCC-EE07D5DA0D3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "senty", "src\senty\senty.csproj", "{2429C22E-9ABE-4125-8470-DA43F39036FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2429C22E-9ABE-4125-8470-DA43F39036FA} = {378DE7B6-5876-4D4D-ACCC-EE07D5DA0D3D}
+	EndGlobalSection
+EndGlobal
